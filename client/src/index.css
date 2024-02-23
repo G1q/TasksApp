@@ -1,0 +1,37 @@
+:root {
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	scroll-behavior: smooth;
+	color-scheme: dark light;
+	font-family: system-ui, sans-serif;
+}
+
+body {
+	margin: 0;
+	line-height: 1.7;
+}
+
+h1,
+h2,
+h3 {
+	text-wrap: balance;
+	line-height: 1.1;
+}
+
+img {
+	display: block;
+	max-width: 100%;
+}
+
+input,
+button,
+textarea {
+	font: inherit;
+}
