@@ -24,8 +24,7 @@ const taskSchema = mongoose.Schema(
 			default: 'No priority',
 		},
 		category: {
-			// type: mongoose.Schema.Types.ObjectId,
-			type: String,
+			type: mongoose.Schema.Types.ObjectId,
 			ref: 'Category',
 		},
 		createdBy: {

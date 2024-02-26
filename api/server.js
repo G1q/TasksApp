@@ -19,12 +19,14 @@ const userRoutes = require('./routes/user.routes.js')
 const authRoutes = require('./routes/auth.routes.js')
 const projectRoutes = require('./routes/project.routes.js')
 const taskRoutes = require('./routes/task.routes.js')
+const categoryRoutes = require('./routes/category.routes.js')
 
 // Middlewares
 app.use('/api/v1/users', userRoutes)
 app.use('/api/v1/auth', authRoutes)
 app.use('/api/v1/projects', projectRoutes)
 app.use('/api/v1/tasks', taskRoutes)
+app.use('/api/v1/categories', categoryRoutes)
 
 // Start the server
 app.listen(process.env.PORT, () => {
