@@ -1,0 +1,23 @@
+.formInputGroup {
+	display: grid;
+	margin-bottom: 1rem;
+}
+
+.formInputGroup label {
+	font-size: 0.875rem;
+	font-weight: 500;
+}
+
+.formInputGroup :is(textarea, input) {
+	font: inherit;
+	padding: 0.25rem 0.5rem;
+	resize: none;
+}
+
+.formInputGroup[data-type='checkbox'] {
+	display: flex;
+	align-items: center;
+	justify-content: start;
+	flex-direction: row-reverse;
+	gap: 0.5rem;
+}

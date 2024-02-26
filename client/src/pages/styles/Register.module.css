@@ -1,0 +1,42 @@
+.register {
+	/* padding-block: 1rem; */
+}
+
+.registerContainer {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 2rem;
+	padding: 3rem 1rem;
+	background-color: #efefef;
+}
+
+.registerForm {
+	color: #333;
+	padding-inline: 2rem;
+}
+
+.registerForm h1 {
+	text-align: center;
+	font-size: 2rem;
+}
+
+.form button {
+	padding: 0.25rem 1rem;
+	background-color: royalblue;
+	cursor: pointer;
+	border: none;
+	border-radius: 0.25em;
+	transition: background-color 250ms ease-in-out;
+	width: 100%;
+	margin-top: 1rem;
+}
+
+.form button:is(:hover, :focus-visible) {
+	background-color: rgb(29, 51, 119);
+}
+
+.registerInfo {
+	background-image: url('https://assets-global.website-files.com/63f5de8e8260819e3bbf4432/65c4aaf63e997ad9df4e7cca_How%20to%20Create%20New%20Email%20Account.png');
+	background-size: cover;
+	background-position: top;
+}
