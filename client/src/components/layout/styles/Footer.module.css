@@ -1,0 +1,16 @@
+.footer {
+	padding: 2rem 2rem 0;
+	background: #333;
+}
+
+.footerContent {
+	width: 100%;
+	max-width: 1200px;
+	margin-inline: auto;
+}
+
+.copyright {
+	display: grid;
+	place-items: center;
+	padding: 0.5rem;
+}

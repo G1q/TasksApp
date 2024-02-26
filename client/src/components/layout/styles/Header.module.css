@@ -1,0 +1,37 @@
+.header {
+	position: sticky;
+	top: 0;
+	left: 0;
+	background-color: #333;
+	z-index: 99999;
+}
+
+.primaryNavigation {
+	width: 100%;
+	max-width: 1200px;
+	margin-inline: auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1rem;
+}
+
+.navigationList {
+	list-style-type: none;
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	margin: 0;
+	margin-left: auto;
+}
+
+.navigationListItem {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.25rem;
+}
+
+.navigationLink {
+	text-decoration: none;
+}
