@@ -1,0 +1,58 @@
+.actionsBar {
+}
+
+.dataTable {
+	width: 100%;
+	border-collapse: collapse;
+	text-align: center;
+}
+
+.dataTable :is(th, td) {
+	border: 1px solid;
+}
+
+.createForm {
+	display: grid;
+	gap: 1rem;
+}
+
+.formFlex {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.formFlex select {
+	font: inherit;
+	padding: 0.25rem 0.5rem;
+}
+
+.formFlex p {
+	margin: 0;
+	color: forestgreen;
+	font-weight: 600;
+	font-size: 0.875rem;
+}
+
+.createForm button {
+	max-width: max-content;
+}
+
+.usersList {
+	padding: 0;
+}
+
+.usersListItem {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.usersListItem button {
+	border: none;
+	background-color: transparent;
+	padding: 0;
+	cursor: pointer;
+	font-weight: 700;
+	color: crimson;
+}

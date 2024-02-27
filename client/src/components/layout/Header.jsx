@@ -19,10 +19,10 @@ const Header = ({ type }) => {
 							<>
 								<li className={styles.navigationListItem}>
 									<Link
-										to="tasks"
+										to="projects"
 										className={styles.navigationLink}
 									>
-										Tasks
+										Projects
 									</Link>
 								</li>
 								<div className="primary__navigation-group">

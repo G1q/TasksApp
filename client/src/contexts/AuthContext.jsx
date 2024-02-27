@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
 		}
 
 		const decodedToken = jwtDecode(authToken)
-		return decodedToken.userId
+		return decodedToken.id
 	}
 
 	const getUsername = () => {

@@ -4,6 +4,8 @@ import SimpleLayout from './layouts/SimpleLayout'
 import Register from './pages/Register'
 import Login from './pages/Login'
 import { AuthProvider } from './contexts/AuthContext'
+import Projects from './pages/Projects/Projects'
+import CreateProject from './pages/Projects/CreateProject'
 
 function App() {
 	return (
@@ -17,6 +19,14 @@ function App() {
 						<Route
 							index
 							element={<h1>Homepage</h1>}
+						/>
+						<Route
+							path="/projects"
+							element={<Projects />}
+						/>
+						<Route
+							path="/projects/create"
+							element={<CreateProject />}
 						/>
 					</Route>
 					<Route
