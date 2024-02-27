@@ -1,11 +1,13 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, Navigate } from 'react-router-dom'
 import InputGroup from '../components/InputGroup'
 import styles from './styles/Register.module.css'
 import ErrorMessage from '../components/ErrorMessage'
 import axiosInstance from '../config/axios.config'
+import { useAuth } from '../contexts/AuthContext'
 
 const Register = () => {
+	const { isLoggedIn } = useAuth()
 	const [username, setUsername] = useState('')
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
@@ -38,55 +40,59 @@ const Register = () => {
 
 	return (
 		<section className={styles.register}>
-			<div className={styles.registerContainer}>
-				<div className={styles.registerForm}>
-					<h1>Create a new account</h1>
-					<form className={styles.form}>
-						<InputGroup
-							label="Username"
-							type="text"
-							selector="username"
-							required
-							onChange={(e) => setUsername(e.target.value)}
-						/>
+			{!isLoggedIn() ? (
+				<div className={styles.registerContainer}>
+					<div className={styles.registerForm}>
+						<h1>Create a new account</h1>
+						<form className={styles.form}>
+							<InputGroup
+								label="Username"
+								type="text"
+								selector="username"
+								required
+								onChange={(e) => setUsername(e.target.value)}
+							/>
 
-						<InputGroup
-							label="Email"
-							type="email"
-							selector="email"
-							required
-							onChange={(e) => setEmail(e.target.value)}
-						/>
+							<InputGroup
+								label="Email"
+								type="email"
+								selector="email"
+								required
+								onChange={(e) => setEmail(e.target.value)}
+							/>
 
-						<InputGroup
-							label="Password"
-							type="password"
-							selector="password"
-							required
-							onChange={(e) => setPassword(e.target.value)}
-						/>
+							<InputGroup
+								label="Password"
+								type="password"
+								selector="password"
+								required
+								onChange={(e) => setPassword(e.target.value)}
+							/>
 
-						<InputGroup
-							label="I have read and agreed to the terms and conditions"
-							type="checkbox"
-							selector="agree"
-							required
-							onChange={() => setTerms(!terms)}
-						/>
-						{error && <ErrorMessage message={error} />}
-						<button
-							type="button"
-							onClick={registerUser}
-						>
-							Create FREE account
-						</button>
-						<p>
-							You allready have an account? Please <Link to="/login">Login</Link> to your account
-						</p>
-					</form>
+							<InputGroup
+								label="I have read and agreed to the terms and conditions"
+								type="checkbox"
+								selector="agree"
+								required
+								onChange={() => setTerms(!terms)}
+							/>
+							{error && <ErrorMessage message={error} />}
+							<button
+								type="button"
+								onClick={registerUser}
+							>
+								Create FREE account
+							</button>
+							<p>
+								You allready have an account? Please <Link to="/login">Login</Link> to your account
+							</p>
+						</form>
+					</div>
+					<div className={styles.registerInfo}></div>
 				</div>
-				<div className={styles.registerInfo}></div>
-			</div>
+			) : (
+				<Navigate to="/" />
+			)}
 		</section>
 	)
 }

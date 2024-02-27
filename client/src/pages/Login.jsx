@@ -1,11 +1,13 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Link, Navigate } from 'react-router-dom'
 import InputGroup from '../components/InputGroup'
 import styles from './styles/Login.module.css'
 import ErrorMessage from '../components/ErrorMessage'
 import axiosInstance from '../config/axios.config'
+import { useAuth } from '../contexts/AuthContext'
 
 const Login = () => {
+	const { isLoggedIn } = useAuth()
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const [error, setError] = useState(false)
@@ -23,7 +25,7 @@ const Login = () => {
 		try {
 			const response = await axiosInstance.post(`/auth/login`, { email, password })
 			localStorage.setItem('token', response.data.token)
-			navigate('/')
+			navigate(0)
 		} catch (error) {
 			setError(error.message) || setError(error.response.data.message)
 		}
@@ -31,37 +33,41 @@ const Login = () => {
 
 	return (
 		<section>
-			<div className={styles.loginContainer}>
-				<h1>Login</h1>
-				<form className={styles.form}>
-					<InputGroup
-						label="Email"
-						type="email"
-						selector="email"
-						required
-						onChange={(e) => setEmail(e.target.value)}
-					/>
+			{!isLoggedIn() ? (
+				<div className={styles.loginContainer}>
+					<h1>Login</h1>
+					<form className={styles.form}>
+						<InputGroup
+							label="Email"
+							type="email"
+							selector="email"
+							required
+							onChange={(e) => setEmail(e.target.value)}
+						/>
 
-					<InputGroup
-						label="Password"
-						type="password"
-						selector="password"
-						required
-						onChange={(e) => setPassword(e.target.value)}
-					/>
+						<InputGroup
+							label="Password"
+							type="password"
+							selector="password"
+							required
+							onChange={(e) => setPassword(e.target.value)}
+						/>
 
-					{error && <ErrorMessage message={error} />}
-					<button
-						type="button"
-						onClick={loginUser}
-					>
-						Login
-					</button>
-					<p>
-						You do not have an account? Please <Link to="/register">register</Link> a new one
-					</p>
-				</form>
-			</div>
+						{error && <ErrorMessage message={error} />}
+						<button
+							type="button"
+							onClick={loginUser}
+						>
+							Login
+						</button>
+						<p>
+							You do not have an account? Please <Link to="/register">register</Link> a new one
+						</p>
+					</form>
+				</div>
+			) : (
+				<Navigate to="/" />
+			)}
 		</section>
 	)
 }
