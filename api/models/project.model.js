@@ -10,7 +10,7 @@ const projectSchema = mongoose.Schema(
 		status: {
 			type: String,
 			required: true,
-			default: 'New',
+			default: 'new',
 		},
 		admin: {
 			type: [mongoose.Schema.Types.ObjectId],

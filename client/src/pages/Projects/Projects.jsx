@@ -11,6 +11,7 @@ const Projects = () => {
 	const [error, setError] = useState(false)
 
 	useEffect(() => {
+		console.log('render')
 		const getProjects = async () => {
 			try {
 				const response = await axiosInstance.get(`/projects/user/${getUserId()}`)
@@ -22,6 +23,7 @@ const Projects = () => {
 		}
 
 		getProjects()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
 	const deleteProject = async (id) => {

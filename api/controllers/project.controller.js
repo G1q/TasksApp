@@ -4,6 +4,8 @@ const createProject = async (req, res) => {
 	try {
 		const project = new Project({
 			title: req.body.title,
+			admin: req.body.admin,
+			contributors: req.body.contributors,
 		})
 
 		await project.save()
@@ -17,6 +19,18 @@ const createProject = async (req, res) => {
 const getProjects = async (req, res) => {
 	try {
 		const projects = await Project.find({})
+
+		res.status(200).json(projects)
+	} catch (error) {
+		res.status(500).json({ message: 'Internal server error' })
+	}
+}
+
+const getUserProjects = async (req, res) => {
+	const { id } = req.params
+
+	try {
+		const projects = await Project.find({ $or: [{ admin: id }, { contributors: id }] })
 
 		res.status(200).json(projects)
 	} catch (error) {
@@ -58,4 +72,4 @@ const deleteProject = async (req, res) => {
 	}
 }
 
-module.exports = { createProject, getProjects, getProject, updateProject, deleteProject }
+module.exports = { createProject, getProjects, getProject, updateProject, deleteProject, getUserProjects }
