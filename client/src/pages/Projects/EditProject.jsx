@@ -58,6 +58,7 @@ const EditProject = () => {
 			}, 2000)
 			return
 		}
+
 		setContributors((prev) => [...prev, user])
 
 		setUserSuccess('User addded successfully to project!')

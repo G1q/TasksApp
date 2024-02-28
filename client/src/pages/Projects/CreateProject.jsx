@@ -33,7 +33,7 @@ const CreateProject = () => {
 	}, [])
 
 	const addUsersToProject = () => {
-		if (contributors.includes(user)) {
+		if (contributors.some((e) => e._id === user._id)) {
 			setUserError('User allready in project!')
 			setTimeout(() => {
 				setUserError(false)
@@ -41,6 +41,7 @@ const CreateProject = () => {
 			return
 		}
 		setContributors((prev) => [...prev, user])
+
 		setUserSuccess('User addded successfully to project!')
 		setTimeout(() => {
 			setUserSuccess(false)
@@ -58,7 +59,7 @@ const CreateProject = () => {
 		if (!title) return setError('Please provide a name for project!')
 
 		try {
-			await axiosInstance.post(`/projects`, { title, contributors, admin: getUserId() })
+			await axiosInstance.post(`/projects`, { title, contributors: contributors.map((contributor) => contributor._id), admin: getUserId() })
 		} catch (error) {
 			setError(error.message) || setError(error.response.data.message)
 		}
@@ -82,7 +83,7 @@ const CreateProject = () => {
 					<div className={styles.formFlex}>
 						<label htmlFor="user">Select users to contribute at this project: </label>
 						<select
-							onChange={(e) => setUser(e.target.value)}
+							onChange={(e) => setUser({ _id: e.target.value, username: e.target.selectedOptions[0].textContent })}
 							defaultValue=""
 							id="user"
 							name="user"
@@ -119,10 +120,10 @@ const CreateProject = () => {
 							<ul className={styles.usersList}>
 								{contributors.map((contributor, index) => (
 									<li
-										key={contributor}
+										key={contributor._id}
 										className={styles.usersListItem}
 									>
-										<span>{contributor}</span>
+										<span>{contributor.username}</span>
 										<button
 											type="button"
 											onClick={() => removeUserFromProject(index)}
