@@ -24,7 +24,6 @@ const CreateProject = () => {
 			try {
 				const response = await axiosInstance.get(`/users`)
 				setUsers(response.data)
-				console.log(users)
 			} catch (error) {
 				setError(error.message) || setError(error.response.data.message)
 			}
@@ -50,7 +49,7 @@ const CreateProject = () => {
 	}
 
 	const removeUserFromProject = (id) => {
-		setContributors(contributors.filter((contributor, index) => index !== id))
+		setContributors(contributors.filter((_, index) => index !== id))
 	}
 
 	const createProject = async (e) => {

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react'
 import styles from '../styles/Projects.module.css'
 import { Link } from 'react-router-dom'
@@ -11,24 +12,22 @@ const Projects = () => {
 	const [error, setError] = useState(false)
 
 	useEffect(() => {
-		console.log('render')
-		const getProjects = async () => {
-			try {
-				const response = await axiosInstance.get(`/projects/user/${getUserId()}`)
-				setProjects(response.data)
-				console.log(projects)
-			} catch (error) {
-				setError(error.message) || setError(error.response.data.message)
-			}
-		}
-
 		getProjects()
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
+
+	const getProjects = async () => {
+		try {
+			const response = await axiosInstance.get(`/projects/user/${getUserId()}`)
+			setProjects(response.data)
+		} catch (error) {
+			setError(error.message) || setError(error.response.data.message)
+		}
+	}
 
 	const deleteProject = async (id) => {
 		try {
 			await axiosInstance.delete(`/projects/${id}`)
+			getProjects()
 		} catch (error) {
 			setError(error.message) || setError(error.response.data.message)
 		}
@@ -66,7 +65,7 @@ const Projects = () => {
 									{project.admin.includes(getUserId()) && (
 										<Link
 											to="./edit"
-											state={project._id}
+											state={{ id: project._id }}
 										>
 											Edit
 										</Link>

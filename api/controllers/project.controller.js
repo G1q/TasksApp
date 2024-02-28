@@ -42,8 +42,7 @@ const getProject = async (req, res) => {
 	const { id } = req.params
 
 	try {
-		const project = await Project.findById(id)
-
+		const project = await Project.findById(id).populate('admin contributors', 'username')
 		res.status(200).json(project)
 	} catch (error) {
 		res.status(500).json({ message: 'Internal server error' })
@@ -52,10 +51,10 @@ const getProject = async (req, res) => {
 
 const updateProject = async (req, res) => {
 	const { id } = req.params
-	const { title, status } = req.body
+	const { title, status, contributors } = req.body
 
 	try {
-		const updatedProject = await Project.findByIdAndUpdate(id, { title, status }, { new: true })
+		const updatedProject = await Project.findByIdAndUpdate(id, { title, status, contributors }, { new: true })
 
 		res.status(200).json(updatedProject)
 	} catch (error) {
