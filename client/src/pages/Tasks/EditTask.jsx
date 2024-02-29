@@ -7,73 +7,58 @@ import axiosInstance from '../../config/axios.config'
 import ErrorMessage from '../../components/ErrorMessage'
 import { useAuth } from '../../contexts/AuthContext'
 import { formatFullDate } from '../../utilities/formatDate'
-import { PROJECT_STATUS } from '../../data/status'
+import { TASK_PRIORITIES, TASK_STATUS } from '../../data/status'
 
 const EditTask = () => {
 	let { state } = useLocation()
 	const { id } = state
 	const { getUserId } = useAuth()
+	const [task, setTask] = useState({})
+	const [projects, setProjects] = useState([])
+	const [categories, setCategories] = useState([])
 	const [project, setProject] = useState({})
-	const [admin, setAdmin] = useState([])
-	const [contributors, setContributors] = useState([])
+	const [category, setCategory] = useState({})
 	const [error, setError] = useState(false)
-
-	const [userSuccess, setUserSuccess] = useState(false)
-	const [userError, setUserError] = useState(false)
-	const [users, setUsers] = useState([])
-	const [user, setUser] = useState('')
 
 	const navigate = useNavigate()
 
 	useEffect(() => {
-		const getProject = async () => {
-			try {
-				const response = await axiosInstance.get(`/projects/${id}`)
-				setProject(response.data)
-				setAdmin(response.data.admin)
-				setContributors(response.data.contributors)
-			} catch (error) {
-				setError(error.message) || setError(error.response.data.message)
-			}
-		}
-
-		const getUsers = async () => {
-			try {
-				const response = await axiosInstance.get(`/users`)
-				setUsers(response.data)
-			} catch (error) {
-				setError(error.message) || setError(error.response.data.message)
-			}
-		}
-
-		getUsers()
-		getProject()
+		getCategories()
+		getProjects()
+		getTask()
 	}, [id])
 
-	const addUsersToProject = () => {
-		if (contributors.some((e) => e._id === user._id)) {
-			setUserError('User allready in project!')
-			setTimeout(() => {
-				setUserError(false)
-			}, 2000)
-			return
+	const getTask = async () => {
+		try {
+			const response = await axiosInstance.get(`/tasks/${id}`)
+			setTask(response.data)
+			setProject(response.data.project)
+			setCategory(response.data.category)
+		} catch (error) {
+			setError(error.message) || setError(error.response.data.message)
 		}
-
-		setContributors((prev) => [...prev, user])
-
-		setUserSuccess('User addded successfully to project!')
-		setTimeout(() => {
-			setUserSuccess(false)
-			setUserError(false)
-		}, 2000)
 	}
 
-	const removeUserFromProject = (id) => {
-		setContributors(contributors.filter((_, index) => index !== id))
+	const getProjects = async () => {
+		try {
+			const response = await axiosInstance.get(`/projects/user/${getUserId()}`)
+			setProjects(response.data)
+		} catch (error) {
+			setError(error.message) || setError(error.response.data.message)
+		}
 	}
 
-	const handleChange = (e) => {
-		setProject((prev) => ({
+	const getCategories = async () => {
+		try {
+			const response = await axiosInstance.get(`/categories`)
+			setCategories(response.data)
+		} catch (error) {
+			setError(error.message) || setError(error.response.data.message)
+		}
+	}
+
+	const handleChanges = (e) => {
+		setTask((prev) => ({
 			...prev,
 			[e.target.name]: e.target.value,
 		}))
@@ -81,8 +66,8 @@ const EditTask = () => {
 
 	const saveChanges = async () => {
 		try {
-			await axiosInstance.put(`/projects/${id}`, { ...project, contributors: contributors.map((contributor) => contributor._id) })
-			navigate('/projects')
+			await axiosInstance.put(`/tasks/${id}`, task)
+			navigate('/tasks')
 		} catch (error) {
 			setError(error.message) || setError(error.response.data.message)
 		}
@@ -90,28 +75,29 @@ const EditTask = () => {
 
 	return (
 		<>
-			<h1>Edit project: {project.title}</h1>
+			<h1>Edit project: {task.title}</h1>
 			{error && <ErrorMessage message={error} />}
 			<section>
 				<div className={styles.projectDetails}>
-					<p>Created on: {formatFullDate(project.createdAt)}</p>
-					<p>Last update on: {formatFullDate(project.updatedAt)}</p>
+					<p>Created on: {formatFullDate(task.createdAt)}</p>
+					<p>Last update on: {formatFullDate(task.updatedAt)}</p>
 					<label htmlFor="title">Title</label>
 					<input
 						type="text"
 						name="title"
 						id="title"
-						placeholder={project.title}
-						onChange={handleChange}
+						value={task.title}
+						onChange={handleChanges}
 					/>
+
 					<label htmlFor="status">Status:</label>
 					<select
 						name="status"
 						id="status"
-						value={project.status}
-						onChange={handleChange}
+						value={task.status}
+						onChange={handleChanges}
 					>
-						{PROJECT_STATUS.map((status) => (
+						{TASK_STATUS.map((status) => (
 							<option
 								key={status}
 								value={status}
@@ -121,68 +107,72 @@ const EditTask = () => {
 						))}
 					</select>
 
-					<p>Admin:</p>
-					<ul className={styles.projectList}>
-						{admin.map((adm) => (
-							<li key={adm._id}>{adm.username}</li>
-						))}
-					</ul>
-
-					<p>Contributors:</p>
-					<div className={styles.formFlex}>
-						<label htmlFor="user">Select users to contribute at this project: </label>
-						<select
-							onChange={(e) => setUser({ _id: e.target.value, username: e.target.selectedOptions[0].textContent })}
-							defaultValue=""
-							id="user"
-							name="user"
-						>
+					<label htmlFor="project">Project:</label>
+					<select
+						name="project"
+						id="project"
+						value={project._id}
+						onChange={handleChanges}
+					>
+						{projects.map((project) => (
 							<option
-								value=""
-								hidden
+								key={project._id}
+								value={project._id}
 							>
-								Choose users
+								{project.title}
 							</option>
-							{users.map((user) => (
-								<option
-									key={user._id}
-									value={user._id}
-								>
-									{user.username}
-								</option>
-							))}
-						</select>
-						<button
-							type="button"
-							onClick={addUsersToProject}
-							disabled={!user}
-						>
-							Add user to project
-						</button>
-						{userSuccess && <p>{userSuccess}</p>}
-						{userError && <ErrorMessage message={userError} />}
-					</div>
-					<ul className={styles.projectList}>
-						{contributors.map((contributor, index) => (
-							<li
-								key={contributor._id}
-								className={styles.usersListItem}
-							>
-								<span>{contributor.username}</span>
-								<button
-									type="button"
-									onClick={() => removeUserFromProject(index)}
-								>
-									&times;
-								</button>
-							</li>
 						))}
-					</ul>
+					</select>
+
+					<label htmlFor="category">Category:</label>
+					<select
+						name="category"
+						id="category"
+						value={category._id}
+						onChange={handleChanges}
+					>
+						{categories.map((category) => (
+							<option
+								key={category._id}
+								value={category._id}
+							>
+								{category.title}
+							</option>
+						))}
+					</select>
+
+					<label htmlFor="priority">Priority:</label>
+					<select
+						name="priority"
+						id="priority"
+						value={task.priority}
+						onChange={handleChanges}
+					>
+						{TASK_PRIORITIES.map((priority) => (
+							<option
+								key={priority}
+								value={priority}
+							>
+								{priority}
+							</option>
+						))}
+					</select>
+
+					<label htmlFor="description">Description</label>
+					<textarea
+						name="description"
+						id="description"
+						cols="30"
+						rows="5"
+						value={task.description}
+						onChange={handleChanges}
+					></textarea>
 				</div>
-				{admin.some((e) => e._id === getUserId()) && (
+
+				{task.createdBy === getUserId() && (
 					<div>
 						<button onClick={saveChanges}>Save changes</button>
-						<button onClick={() => navigate('/projects')}>Cancel</button>
+						<button onClick={() => navigate('/tasks')}>Cancel</button>
 					</div>
 				)}
 			</section>

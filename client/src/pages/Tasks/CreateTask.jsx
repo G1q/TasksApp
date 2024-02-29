@@ -6,35 +6,18 @@ import { useNavigate } from 'react-router-dom'
 import axiosInstance from '../../config/axios.config'
 import ErrorMessage from '../../components/ErrorMessage'
 import { useAuth } from '../../contexts/AuthContext'
-import { TASK_CATEGORIES, TASK_PRIORITIES } from '../../data/status'
+import { TASK_PRIORITIES } from '../../data/status'
 
 const CreateTask = () => {
 	const { getUserId } = useAuth()
-	const [users, setUsers] = useState([])
-	const [title, setTitle] = useState('')
-	const [priority, setPriority] = useState('')
-	const [category, setCategory] = useState('')
-	const [deadline, setDeadline] = useState(false)
-	const [selectedProject, setSelectedProject] = useState('')
-	const [user, setUser] = useState('')
-	const [contributors, setContributors] = useState([])
-	const [userSuccess, setUserSuccess] = useState(false)
-	const [userError, setUserError] = useState(false)
 	const [error, setError] = useState(false)
 	const [projects, setProjects] = useState([])
+	const [categories, setCategories] = useState([])
+	const [task, setTask] = useState({})
 
 	const navigate = useNavigate()
 
 	useEffect(() => {
-		const getUsers = async () => {
-			try {
-				const response = await axiosInstance.get(`/users`)
-				setUsers(response.data)
-			} catch (error) {
-				setError(error.message) || setError(error.response.data.message)
-			}
-		}
-
 		const getProjects = async () => {
 			try {
 				const response = await axiosInstance.get(`/projects/user/${getUserId()}`)
@@ -44,56 +27,38 @@ const CreateTask = () => {
 			}
 		}
 
+		const getCategories = async () => {
+			try {
+				const response = await axiosInstance.get(`/categories`)
+				setCategories(response.data)
+			} catch (error) {
+				setError(error.message) || setError(error.response.data.message)
+			}
+		}
+
+		getCategories()
 		getProjects()
-		getUsers()
 	}, [])
 
-	const addUsersToTask = () => {
-		if (contributors.some((e) => e._id === user._id)) {
-			setUserError('User allready in this task!')
-			setTimeout(() => {
-				setUserError(false)
-			}, 2000)
-			return
-		}
-		setContributors((prev) => [...prev, user])
-
-		setUserSuccess('User addded successfully to this task!')
-		setTimeout(() => {
-			setUserSuccess(false)
-			setUserError(false)
-		}, 2000)
-	}
-
-	const removeUserFromTask = (id) => {
-		setContributors(contributors.filter((_, index) => index !== id))
+	const handleChanges = (e) => {
+		setTask((prev) => ({
+			...prev,
+			[e.target.name]: e.target.value,
+		}))
 	}
 
 	const createTask = async (e) => {
 		e.preventDefault()
 
-		if (!title) return setError('Please provide a name for task!')
+		if (!task.title) return setError('Please provide a name for task!')
 
 		try {
-			const task = {
-				title,
-				category,
-				priority,
-				deadline,
-				project: selectedProject,
-				assignedTo: contributors.map((contributor) => contributor._id),
-				createdBy: getUserId(),
-			}
-			console.log(task)
-
-			await axiosInstance.post(`/tasks`, task)
+			await axiosInstance.post(`/tasks`, { ...task, createdBy: getUserId() })
 		} catch (error) {
-			console.log(error)
 			setError(error.message) || setError(error.response.data.message)
 		}
 
-		//TODO:
-		// navigate('/tasks')
+		navigate('/tasks')
 	}
 
 	return (
@@ -106,7 +71,7 @@ const CreateTask = () => {
 						label="Task title"
 						selector="title"
 						required
-						onChange={(e) => setTitle(e.target.value)}
+						onChange={handleChanges}
 					/>
 
 					<div className={styles.formFlex}>
@@ -116,7 +81,7 @@ const CreateTask = () => {
 								name="project"
 								id="project"
 								defaultValue=""
-								onChange={(e) => setSelectedProject(e.target.value)}
+								onChange={handleChanges}
 							>
 								<option
 									value=""
@@ -141,7 +106,7 @@ const CreateTask = () => {
 								name="category"
 								id="category"
 								defaultValue=""
-								onChange={(e) => setCategory(e.target.value)}
+								onChange={handleChanges}
 							>
 								<option
 									value=""
@@ -149,12 +114,12 @@ const CreateTask = () => {
 								>
 									Choose category
 								</option>
-								{TASK_CATEGORIES.map((category) => (
+								{categories.map((category) => (
 									<option
-										key={category}
-										value={category}
+										key={category._id}
+										value={category._id}
 									>
-										{category}
+										{category.title}
 									</option>
 								))}
 							</select>
@@ -168,7 +133,7 @@ const CreateTask = () => {
 								name="priority"
 								id="priority"
 								defaultValue=""
-								onChange={(e) => setPriority(e.target.value)}
+								onChange={handleChanges}
 							>
 								<option
 									value=""
@@ -186,73 +151,18 @@ const CreateTask = () => {
 								))}
 							</select>
 						</div>
-
-						<div>
-							<label htmlFor="deadline">Deadline:</label>
-							<input
-								type="date"
-								name="deadline"
-								id="deadline"
-								onChange={(e) => setDeadline(e.target.value)}
-							/>
-						</div>
 					</div>
 
-					<div className={styles.formFlex}>
-						<label htmlFor="user">Select users to assign this task: </label>
-						<select
-							onChange={(e) => setUser({ _id: e.target.value, username: e.target.selectedOptions[0].textContent })}
-							defaultValue=""
-							id="user"
-							name="user"
-						>
-							<option
-								value=""
-								hidden
-							>
-								Choose users
-							</option>
-							{users.map((user) => (
-								<option
-									key={user._id}
-									value={user._id}
-								>
-									{user.username}
-								</option>
-							))}
-						</select>
-						<button
-							type="button"
-							onClick={addUsersToTask}
-							disabled={!user}
-						>
-							Add user to task
-						</button>
-						{userSuccess && <p>{userSuccess}</p>}
-						{userError && <ErrorMessage message={userError} />}
+					<div>
+						<label htmlFor="description">Description:</label>
+						<textarea
+							name="description"
+							id="description"
+							cols="30"
+							rows="3"
+							onChange={handleChanges}
+						></textarea>
 					</div>
-
-					{contributors.length > 0 && (
-						<>
-							<h2>Contributors:</h2>
-							<ul className={styles.usersList}>
-								{contributors.map((contributor, index) => (
-									<li
-										key={contributor._id}
-										className={styles.usersListItem}
-									>
-										<span>{contributor.username}</span>
-										<button
-											type="button"
-											onClick={() => removeUserFromTask(index)}
-										>
-											&times;
-										</button>
-									</li>
-								))}
-							</ul>
-						</>
-					)}
 
 					<button
 						type="button"

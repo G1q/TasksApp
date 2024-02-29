@@ -2,15 +2,7 @@ const Task = require('../models/task.model.js')
 
 const createTask = async (req, res) => {
 	try {
-		const task = new Task({
-			title: req.body.title,
-			deadline: req.body.deadline,
-			project: req.body.project,
-			priority: req.body.priority,
-			category: req.body.category,
-			createdBy: req.body.createdBy,
-			assignedTo: req.body.assignedTo,
-		})
+		const task = new Task({ ...req.body })
 
 		await task.save()
 
@@ -22,7 +14,7 @@ const createTask = async (req, res) => {
 
 const getTasks = async (req, res) => {
 	try {
-		const tasks = await Task.find({})
+		const tasks = await Task.find({}).populate('project category', 'title')
 
 		res.status(200).json(tasks)
 	} catch (error) {
@@ -34,7 +26,7 @@ const getTask = async (req, res) => {
 	const { id } = req.params
 
 	try {
-		const task = await Task.findById(id)
+		const task = await Task.findById(id).populate('project category', 'title')
 
 		res.status(200).json(task)
 	} catch (error) {
@@ -46,7 +38,7 @@ const getUserTasks = async (req, res) => {
 	const { id } = req.params
 
 	try {
-		const tasks = await Task.find({ $or: [{ createdBy: id }, { assignedTo: id }] })
+		const tasks = await Task.find({ createdBy: id }).populate('project category', 'title')
 
 		res.status(200).json(tasks)
 	} catch (error) {
@@ -56,10 +48,9 @@ const getUserTasks = async (req, res) => {
 
 const updateTask = async (req, res) => {
 	const { id } = req.params
-	const { title, deadline, project, priority, category, createdBy, assignedTo, status } = req.body
 
 	try {
-		const updatedTask = await Task.findByIdAndUpdate(id, { title, deadline, project, priority, category, createdBy, assignedTo, status }, { new: true })
+		const updatedTask = await Task.findByIdAndUpdate(id, { ...req.body }, { new: true })
 
 		res.status(200).json(updatedTask)
 	} catch (error) {

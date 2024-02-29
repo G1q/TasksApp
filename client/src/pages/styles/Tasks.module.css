@@ -13,6 +13,11 @@
 	gap: 1rem;
 }
 
+.createForm textarea {
+	resize: none;
+	width: 100%;
+}
+
 .formFlex {
 	display: flex;
 	align-items: center;

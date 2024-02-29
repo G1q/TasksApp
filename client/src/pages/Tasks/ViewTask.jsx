@@ -10,56 +10,46 @@ import { formatFullDate } from '../../utilities/formatDate'
 const ViewTask = () => {
 	const { id } = useParams()
 	const { getUserId } = useAuth()
+	const [task, setTask] = useState({})
 	const [project, setProject] = useState({})
-	const [admin, setAdmin] = useState([])
-	const [contributors, setContributors] = useState([])
+	const [category, setCategory] = useState({})
 	const [error, setError] = useState(false)
 
 	useEffect(() => {
-		const getProject = async () => {
-			try {
-				const response = await axiosInstance.get(`/projects/${id}`)
-				setProject(response.data)
-				setAdmin(response.data.admin)
-				setContributors(response.data.contributors)
-			} catch (error) {
-				setError(error.message) || setError(error.response.data.message)
-			}
-		}
-
-		getProject()
+		getTask()
 	}, [id])
+
+	const getTask = async () => {
+		try {
+			const response = await axiosInstance.get(`/tasks/${id}`)
+			setTask(response.data)
+			setProject(response.data.project)
+			setCategory(response.data.category)
+		} catch (error) {
+			setError(error.message) || setError(error.response.data.message)
+		}
+	}
 
 	return (
 		<>
-			<h1>Project: {project.title}</h1>
+			<h1>Task: {task.title}</h1>
 			{error && <ErrorMessage message={error} />}
 			<section>
 				<div className={styles.projectDetails}>
-					<p>Created on: {formatFullDate(project.createdAt)}</p>
-					<p>Last update on: {formatFullDate(project.updatedAt)}</p>
-					<p>Status: {project.status}</p>
-
-					<p>Admin:</p>
-					<ul className={styles.projectList}>
-						{admin.map((adm) => (
-							<li key={adm._id}>{adm.username}</li>
-						))}
-					</ul>
-
-					<p>Contributors:</p>
-					<ul className={styles.projectList}>
-						{contributors.map((contributor) => (
-							<li key={contributor._id}>{contributor.username}</li>
-						))}
-					</ul>
+					<p>Created on: {formatFullDate(task.createdAt)}</p>
+					<p>Last update on: {formatFullDate(task.updatedAt)}</p>
+					<p>Status: {task.status}</p>
+					<p>Project: {project.title}</p>
+					<p>Category: {category.title}</p>
+					<p>Priority: {task.priority}</p>
+					<p>Description: {task.description}</p>
 				</div>
-				{admin.some((e) => e._id === getUserId()) && (
+				{task.createdBy === getUserId() && (
 					<Link
-						to="/projects/edit"
-						state={{ id: project._id }}
+						to="/tasks/edit"
+						state={{ id: task._id }}
 					>
-						Edit project
+						Edit task
 					</Link>
 				)}
 			</section>

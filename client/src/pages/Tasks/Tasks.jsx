@@ -19,7 +19,6 @@ const Tasks = () => {
 		try {
 			const response = await axiosInstance.get(`/tasks/user/${getUserId()}`)
 			setTasks(response.data)
-			console.log(tasks)
 		} catch (error) {
 			setError(error.message) || setError(error.response.data.message)
 		}
@@ -46,33 +45,37 @@ const Tasks = () => {
 					<thead>
 						<tr>
 							<th>Title</th>
-							<th>My role</th>
+							<th>Project</th>
 							<th>Status</th>
+							<th>Priority</th>
+							<th>Category</th>
 							<th>View</th>
 							<th>Edit</th>
 							<th>Delete</th>
 						</tr>
 					</thead>
 					<tbody>
-						{tasks.map((project) => (
-							<tr key={project._id}>
-								<td>{project.title}</td>
-								<td>{project.admin.includes(getUserId()) ? 'Admin' : 'Contributor'}</td>
-								<td>{project.status}</td>
+						{tasks.map((task) => (
+							<tr key={task._id}>
+								<td>{task.title}</td>
+								<td>{task.project.title}</td>
+								<td>{task.status}</td>
+								<td>{task.priority}</td>
+								<td>{task.category.title}</td>
 								<td>
-									<Link to={`./view/${project._id}`}>View</Link>
+									<Link to={`./view/${task._id}`}>View</Link>
 								</td>
 								<td>
-									{project.admin.includes(getUserId()) && (
-										<Link
-											to="./edit"
-											state={{ id: project._id }}
-										>
-											Edit
-										</Link>
-									)}
+									<Link
+										to="./edit"
+										state={{ id: task._id }}
+									>
+										Edit
+									</Link>
 								</td>
-								<td>{project.admin.includes(getUserId()) && <button onClick={() => deleteTask(project._id)}>&times;</button>}</td>
+								<td>
+									<button onClick={() => deleteTask(task._id)}>&times;</button>
+								</td>
 							</tr>
 						))}
 					</tbody>

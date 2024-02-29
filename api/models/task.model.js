@@ -11,9 +11,6 @@ const taskSchema = mongoose.Schema(
 			required: true,
 			default: 'New',
 		},
-		deadline: {
-			type: String,
-		},
 		project: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'Project',
@@ -27,12 +24,11 @@ const taskSchema = mongoose.Schema(
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'Category',
 		},
+		description: {
+			type: String,
+		},
 		createdBy: {
 			type: mongoose.Schema.Types.ObjectId,
-			ref: 'User',
-		},
-		assignedTo: {
-			type: [mongoose.Schema.Types.ObjectId],
 			ref: 'User',
 		},
 	},
