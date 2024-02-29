@@ -20,6 +20,9 @@ import AdminEditProject from './pages/Admin/Projects/AdminEditProject'
 import AdminTasks from './pages/Admin/Tasks/AdminTasks'
 import AdminEditTask from './pages/Admin/Tasks/AdminEditTask'
 import AdminViewTask from './pages/Admin/Tasks/AdminViewTask'
+import AdminCategories from './pages/Admin/Categories/AdminCategories'
+import AdminEditCategory from './pages/Admin/Categories/AdminEditCategory'
+import AdminCreateCategory from './pages/Admin/Categories/AdminCreateCategory'
 
 function App() {
 	return (
@@ -98,6 +101,18 @@ function App() {
 						<Route
 							path="/admin/tasks/edit"
 							element={<AdminEditTask />}
+						/>
+						<Route
+							path="/admin/categories/"
+							element={<AdminCategories />}
+						/>
+						<Route
+							path="/admin/categories/create"
+							element={<AdminCreateCategory />}
+						/>
+						<Route
+							path="/admin/categories/edit"
+							element={<AdminEditCategory />}
 						/>
 					</Route>
 					<Route
