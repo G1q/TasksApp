@@ -41,7 +41,7 @@ const getProject = async (req, res) => {
 	const { id } = req.params
 
 	try {
-		const project = await Project.findById(id).populate('admin', 'username')
+		const project = await Project.findById(id)
 		res.status(200).json(project)
 	} catch (error) {
 		res.status(500).json({ message: 'Internal server error' })

@@ -14,7 +14,6 @@ const EditProject = () => {
 	const { id } = state
 	const { getUserId } = useAuth()
 	const [project, setProject] = useState({})
-	const [admin, setAdmin] = useState([])
 	const [error, setError] = useState(false)
 
 	const navigate = useNavigate()
@@ -24,7 +23,6 @@ const EditProject = () => {
 			try {
 				const response = await axiosInstance.get(`/projects/${id}`)
 				setProject(response.data)
-				setAdmin(response.data.admin)
 			} catch (error) {
 				setError(error.message) || setError(error.response.data.message)
 			}
@@ -83,7 +81,7 @@ const EditProject = () => {
 						))}
 					</select>
 				</div>
-				{admin._id === getUserId() && (
+				{project.admin === getUserId() && (
 					<div>
 						<button onClick={saveChanges}>Save changes</button>
 						<button onClick={() => navigate('/projects')}>Cancel</button>

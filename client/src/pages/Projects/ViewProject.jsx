@@ -11,7 +11,6 @@ const ViewProject = () => {
 	const { id } = useParams()
 	const { getUserId } = useAuth()
 	const [project, setProject] = useState({})
-	const [admin, setAdmin] = useState({})
 	const [error, setError] = useState(false)
 
 	useEffect(() => {
@@ -19,7 +18,6 @@ const ViewProject = () => {
 			try {
 				const response = await axiosInstance.get(`/projects/${id}`)
 				setProject(response.data)
-				setAdmin(response.data.admin)
 			} catch (error) {
 				setError(error.message) || setError(error.response.data.message)
 			}
@@ -39,7 +37,7 @@ const ViewProject = () => {
 					<p>Status: {project.status}</p>
 				</div>
 
-				{admin._id === getUserId() && (
+				{project.admin === getUserId() && (
 					<Link
 						to="/projects/edit"
 						state={{ id: project._id }}
