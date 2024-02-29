@@ -7,28 +7,28 @@ import ErrorMessage from '../../../components/ErrorMessage'
 import { useAuth } from '../../../contexts/AuthContext'
 import NoPermissions from '../../../components/NoPermissions'
 
-const AdminProjects = () => {
-	const { isLoggedIn, getUserRole } = useAuth()
-	const [projects, setProjects] = useState([])
+const AdminUsers = () => {
+	const { isLoggedIn, getUserRole, getUserId } = useAuth()
+	const [users, setUsers] = useState([])
 	const [error, setError] = useState(false)
 
 	useEffect(() => {
-		getProjects()
+		getUsers()
 	}, [])
 
-	const getProjects = async () => {
+	const getUsers = async () => {
 		try {
-			const response = await axiosInstance.get('projects')
-			setProjects(response.data)
+			const response = await axiosInstance.get('users')
+			setUsers(response.data)
 		} catch (error) {
 			setError(error.message) || setError(error.response.data.message)
 		}
 	}
 
-	const deleteProject = async (id) => {
+	const deleteUser = async (id) => {
 		try {
-			await axiosInstance.delete(`/projects/${id}`)
-			getProjects()
+			await axiosInstance.delete(`/users/${id}`)
+			getUsers()
 		} catch (error) {
 			setError(error.message) || setError(error.response.data.message)
 		}
@@ -36,41 +36,42 @@ const AdminProjects = () => {
 
 	return (
 		<>
-			<h1>Projects</h1>
+			<h1>Users</h1>
+			<Link to="./create">Create new user</Link>
 			{isLoggedIn() && getUserRole() === 'admin' ? (
 				<section>
 					{error && <ErrorMessage message={error} />}
 					<table className={styles.dataTable}>
 						<thead>
 							<tr>
-								<th>Title</th>
-								<th>Admin</th>
-								<th>Status</th>
+								<th>Username</th>
+								<th>Email</th>
+								<th>Role</th>
+								<th>Active</th>
 								<th>View</th>
 								<th>Edit</th>
 								<th>Delete</th>
 							</tr>
 						</thead>
 						<tbody>
-							{projects.map((project) => (
-								<tr key={project._id}>
-									<td>{project.title}</td>
-									<td>{project.admin.username}</td>
-									<td>{project.status}</td>
+							{users.map((user) => (
+								<tr key={user._id}>
+									<td>{user.username}</td>
+									<td>{user.email}</td>
+									<td>{user.role}</td>
+									<td>{user.active ? 'Yes' : 'No'}</td>
 									<td>
-										<Link to={`./view/${project._id}`}>View</Link>
+										<Link to={`./view/${user._id}`}>View</Link>
 									</td>
 									<td>
 										<Link
 											to="./edit"
-											state={{ id: project._id }}
+											state={{ id: user._id }}
 										>
 											Edit
 										</Link>
 									</td>
-									<td>
-										<button onClick={() => deleteProject(project._id)}>&times;</button>
-									</td>
+									<td>{getUserId() !== user._id && <button onClick={() => deleteUser(user._id)}>&times;</button>}</td>
 								</tr>
 							))}
 						</tbody>
@@ -83,4 +84,4 @@ const AdminProjects = () => {
 	)
 }
 
-export default AdminProjects
+export default AdminUsers

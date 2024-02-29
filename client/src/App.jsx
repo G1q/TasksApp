@@ -23,6 +23,10 @@ import AdminViewTask from './pages/Admin/Tasks/AdminViewTask'
 import AdminCategories from './pages/Admin/Categories/AdminCategories'
 import AdminEditCategory from './pages/Admin/Categories/AdminEditCategory'
 import AdminCreateCategory from './pages/Admin/Categories/AdminCreateCategory'
+import AdminUsers from './pages/Admin/Users/AdminUsers'
+import AdminViewUser from './pages/Admin/Users/AdminViewUser'
+import AdminEditUser from './pages/Admin/Users/AdminEditUser'
+import AdminCreateUser from './pages/Admin/Users/AdminCreateUser'
 
 function App() {
 	return (
@@ -77,6 +81,22 @@ function App() {
 						<Route
 							index
 							element={<AdminDashboard />}
+						/>
+						<Route
+							path="/admin/users"
+							element={<AdminUsers />}
+						/>
+						<Route
+							path="/admin/users/view/:id"
+							element={<AdminViewUser />}
+						/>
+						<Route
+							path="/admin/users/edit"
+							element={<AdminEditUser />}
+						/>
+						<Route
+							path="/admin/users/create"
+							element={<AdminCreateUser />}
 						/>
 						<Route
 							path="/admin/projects"

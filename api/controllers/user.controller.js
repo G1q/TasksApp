@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt')
 const User = require('../models/user.model.js')
+const Task = require('../models/task.model.js')
+const Project = require('../models/project.model.js')
 
 const createUser = async (req, res) => {
 	try {
@@ -56,7 +58,7 @@ const getUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
 	const { id } = req.params
-	const { username, email, password, role } = req.body
+	const { username, email, password, role, active } = req.body
 	let hashedPassword = password
 
 	try {
@@ -73,7 +75,7 @@ const updateUser = async (req, res) => {
 		// Check if password is changed
 		if (password) hashedPassword = await bcrypt.hash(password, 10)
 
-		const updatedUser = await User.findByIdAndUpdate(id, { username, email, role, password: hashedPassword }, { new: true })
+		const updatedUser = await User.findByIdAndUpdate(id, { username, email, role, active, password: hashedPassword }, { new: true })
 
 		res.status(200).json(updatedUser)
 	} catch (error) {
@@ -82,8 +84,16 @@ const updateUser = async (req, res) => {
 }
 
 const deleteUser = async (req, res) => {
+	const { id } = req.params
+
+	const tasks = await Task.countDocuments({ createdBy: id })
+	if (tasks > 0) return res.status(403).json({ message: "You can't delete this user because have active tasks!" })
+
+	const projects = await Project.countDocuments({ admin: id })
+	if (projects > 0) return res.status(403).json({ message: "You can't delete this user because have active projects!" })
+
 	try {
-		const user = await User.findByIdAndDelete(req.params.id)
+		const user = await User.findByIdAndDelete(id)
 		res.status(200).json({ message: 'User deleted successfully!' })
 	} catch (error) {
 		res.status(500).json({ message: 'Internal server error' })
