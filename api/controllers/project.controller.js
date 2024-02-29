@@ -1,4 +1,5 @@
 const Project = require('../models/project.model.js')
+const Task = require('../models/task.model.js')
 
 const createProject = async (req, res) => {
 	try {
@@ -17,7 +18,7 @@ const createProject = async (req, res) => {
 
 const getProjects = async (req, res) => {
 	try {
-		const projects = await Project.find({})
+		const projects = await Project.find({}).populate('admin', 'username')
 
 		res.status(200).json(projects)
 	} catch (error) {
@@ -62,8 +63,13 @@ const updateProject = async (req, res) => {
 }
 
 const deleteProject = async (req, res) => {
+	const { id } = req.params
+	const tasks = await Task.countDocuments({ project: id })
+
+	if (tasks > 0) return res.status(403).json({ message: "You can't delete this project because have active tasks on it!" })
+
 	try {
-		const project = await Project.findByIdAndDelete(req.params.id)
+		const project = await Project.findByIdAndDelete(id)
 		res.status(200).json({ message: 'Project deleted successfully!' })
 	} catch (error) {
 		res.status(500).json({ message: 'Internal server error' })
