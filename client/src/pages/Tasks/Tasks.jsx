@@ -1,33 +1,34 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react'
-import styles from '../styles/Projects.module.css'
+import styles from '../styles/Tasks.module.css'
 import { Link } from 'react-router-dom'
 import axiosInstance from '../../config/axios.config'
 import ErrorMessage from '../../components/ErrorMessage'
 import { useAuth } from '../../contexts/AuthContext'
 
-const Projects = () => {
+const Tasks = () => {
 	const { getUserId } = useAuth()
-	const [projects, setProjects] = useState([])
+	const [tasks, setTasks] = useState([])
 	const [error, setError] = useState(false)
 
 	useEffect(() => {
-		getProjects()
+		getTasks()
 	}, [])
 
-	const getProjects = async () => {
+	const getTasks = async () => {
 		try {
-			const response = await axiosInstance.get(`/projects/user/${getUserId()}`)
-			setProjects(response.data)
+			const response = await axiosInstance.get(`/tasks/user/${getUserId()}`)
+			setTasks(response.data)
+			console.log(tasks)
 		} catch (error) {
 			setError(error.message) || setError(error.response.data.message)
 		}
 	}
 
-	const deleteProject = async (id) => {
+	const deleteTask = async (id) => {
 		try {
-			await axiosInstance.delete(`/projects/${id}`)
-			getProjects()
+			await axiosInstance.delete(`/tasks/${id}`)
+			getTasks()
 		} catch (error) {
 			setError(error.message) || setError(error.response.data.message)
 		}
@@ -35,16 +36,17 @@ const Projects = () => {
 
 	return (
 		<>
-			<h1>My Projects</h1>
+			<h1>My Tasks</h1>
 			<section>
 				<div className={styles.actionsBar}>
-					<Link to="./create">Create new project</Link>
+					<Link to="./create">Create new task</Link>
 				</div>
 				{error && <ErrorMessage message={error} />}
 				<table className={styles.dataTable}>
 					<thead>
 						<tr>
 							<th>Title</th>
+							<th>My role</th>
 							<th>Status</th>
 							<th>View</th>
 							<th>Edit</th>
@@ -52,22 +54,25 @@ const Projects = () => {
 						</tr>
 					</thead>
 					<tbody>
-						{projects.map((project) => (
+						{tasks.map((project) => (
 							<tr key={project._id}>
 								<td>{project.title}</td>
+								<td>{project.admin.includes(getUserId()) ? 'Admin' : 'Contributor'}</td>
 								<td>{project.status}</td>
 								<td>
 									<Link to={`./view/${project._id}`}>View</Link>
 								</td>
 								<td>
-									<Link
-										to="./edit"
-										state={{ id: project._id }}
-									>
-										Edit
-									</Link>
+									{project.admin.includes(getUserId()) && (
+										<Link
+											to="./edit"
+											state={{ id: project._id }}
+										>
+											Edit
+										</Link>
+									)}
 								</td>
-								<td>{project.admin.includes(getUserId()) && <button onClick={() => deleteProject(project._id)}>&times;</button>}</td>
+								<td>{project.admin.includes(getUserId()) && <button onClick={() => deleteTask(project._id)}>&times;</button>}</td>
 							</tr>
 						))}
 					</tbody>
@@ -77,4 +82,4 @@ const Projects = () => {
 	)
 }
 
-export default Projects
+export default Tasks

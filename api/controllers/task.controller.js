@@ -1,16 +1,15 @@
 const Task = require('../models/task.model.js')
 
 const createTask = async (req, res) => {
-	const { title, deadline, project, priority, category, createdBy, assignedTo } = req.body
 	try {
 		const task = new Task({
-			title,
-			deadline,
-			project,
-			priority,
-			category,
-			createdBy,
-			assignedTo,
+			title: req.body.title,
+			deadline: req.body.deadline,
+			project: req.body.project,
+			priority: req.body.priority,
+			category: req.body.category,
+			createdBy: req.body.createdBy,
+			assignedTo: req.body.assignedTo,
 		})
 
 		await task.save()
@@ -43,6 +42,18 @@ const getTask = async (req, res) => {
 	}
 }
 
+const getUserTasks = async (req, res) => {
+	const { id } = req.params
+
+	try {
+		const tasks = await Task.find({ $or: [{ createdBy: id }, { assignedTo: id }] })
+
+		res.status(200).json(tasks)
+	} catch (error) {
+		res.status(500).json({ message: 'Internal server error' })
+	}
+}
+
 const updateTask = async (req, res) => {
 	const { id } = req.params
 	const { title, deadline, project, priority, category, createdBy, assignedTo, status } = req.body
@@ -65,4 +76,4 @@ const deleteTask = async (req, res) => {
 	}
 }
 
-module.exports = { createTask, getTasks, getTask, updateTask, deleteTask }
+module.exports = { createTask, getTasks, getTask, updateTask, deleteTask, getUserTasks }

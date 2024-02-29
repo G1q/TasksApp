@@ -25,6 +25,14 @@ const Header = ({ type }) => {
 										Projects
 									</Link>
 								</li>
+								<li className={styles.navigationListItem}>
+									<Link
+										to="tasks"
+										className={styles.navigationLink}
+									>
+										Tasks
+									</Link>
+								</li>
 								<div className="primary__navigation-group">
 									<p>
 										Hello, <Link to="/user/">{getUsername()}</Link>

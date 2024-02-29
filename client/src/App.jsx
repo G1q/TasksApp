@@ -8,6 +8,10 @@ import Projects from './pages/Projects/Projects'
 import CreateProject from './pages/Projects/CreateProject'
 import ViewProject from './pages/Projects/ViewProject'
 import EditProject from './pages/Projects/EditProject'
+import Tasks from './pages/Tasks/Tasks'
+import CreateTask from './pages/Tasks/CreateTask'
+import ViewTask from './pages/Tasks/ViewTask'
+import EditTask from './pages/Tasks/EditTask'
 
 function App() {
 	return (
@@ -37,6 +41,22 @@ function App() {
 						<Route
 							path="/projects/edit"
 							element={<EditProject />}
+						/>
+						<Route
+							path="/tasks"
+							element={<Tasks />}
+						/>
+						<Route
+							path="/tasks/create"
+							element={<CreateTask />}
+						/>
+						<Route
+							path="/tasks/view/:id"
+							element={<ViewTask />}
+						/>
+						<Route
+							path="/tasks/edit"
+							element={<EditTask />}
 						/>
 					</Route>
 					<Route

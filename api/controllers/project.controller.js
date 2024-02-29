@@ -5,7 +5,6 @@ const createProject = async (req, res) => {
 		const project = new Project({
 			title: req.body.title,
 			admin: req.body.admin,
-			contributors: req.body.contributors,
 		})
 
 		await project.save()
@@ -30,7 +29,7 @@ const getUserProjects = async (req, res) => {
 	const { id } = req.params
 
 	try {
-		const projects = await Project.find({ $or: [{ admin: id }, { contributors: id }] })
+		const projects = await Project.find({ admin: id })
 
 		res.status(200).json(projects)
 	} catch (error) {
@@ -42,7 +41,7 @@ const getProject = async (req, res) => {
 	const { id } = req.params
 
 	try {
-		const project = await Project.findById(id).populate('admin contributors', 'username')
+		const project = await Project.findById(id).populate('admin', 'username')
 		res.status(200).json(project)
 	} catch (error) {
 		res.status(500).json({ message: 'Internal server error' })
@@ -51,10 +50,10 @@ const getProject = async (req, res) => {
 
 const updateProject = async (req, res) => {
 	const { id } = req.params
-	const { title, status, contributors } = req.body
+	const { title, status } = req.body
 
 	try {
-		const updatedProject = await Project.findByIdAndUpdate(id, { title, status, contributors }, { new: true })
+		const updatedProject = await Project.findByIdAndUpdate(id, { title, status }, { new: true })
 
 		res.status(200).json(updatedProject)
 	} catch (error) {

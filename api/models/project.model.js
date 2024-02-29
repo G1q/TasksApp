@@ -13,11 +13,7 @@ const projectSchema = mongoose.Schema(
 			default: 'New',
 		},
 		admin: {
-			type: [mongoose.Schema.Types.ObjectId],
-			ref: 'User',
-		},
-		contributors: {
-			type: [mongoose.Schema.Types.ObjectId],
+			type: mongoose.Schema.Types.ObjectId,
 			ref: 'User',
 		},
 	},
