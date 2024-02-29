@@ -17,6 +17,9 @@ import AdminDashboard from './pages/Admin/AdminDashboard'
 import AdminProjects from './pages/Admin/Projects/AdminProjects'
 import AdminViewProject from './pages/Admin/Projects/AdminViewProject'
 import AdminEditProject from './pages/Admin/Projects/AdminEditProject'
+import AdminTasks from './pages/Admin/Tasks/AdminTasks'
+import AdminEditTask from './pages/Admin/Tasks/AdminEditTask'
+import AdminViewTask from './pages/Admin/Tasks/AdminViewTask'
 
 function App() {
 	return (
@@ -83,6 +86,18 @@ function App() {
 						<Route
 							path="/admin/projects/edit"
 							element={<AdminEditProject />}
+						/>
+						<Route
+							path="/admin/tasks"
+							element={<AdminTasks />}
+						/>
+						<Route
+							path="/admin/tasks/view/:id"
+							element={<AdminViewTask />}
+						/>
+						<Route
+							path="/admin/tasks/edit"
+							element={<AdminEditTask />}
 						/>
 					</Route>
 					<Route
