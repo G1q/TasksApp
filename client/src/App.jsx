@@ -12,6 +12,8 @@ import Tasks from './pages/Tasks/Tasks'
 import CreateTask from './pages/Tasks/CreateTask'
 import ViewTask from './pages/Tasks/ViewTask'
 import EditTask from './pages/Tasks/EditTask'
+import AdminLayout from './layouts/AdminLayout'
+import AdminDashboard from './pages/Admin/AdminDashboard'
 
 function App() {
 	return (
@@ -57,6 +59,15 @@ function App() {
 						<Route
 							path="/tasks/edit"
 							element={<EditTask />}
+						/>
+					</Route>
+					<Route
+						path="/admin"
+						element={<AdminLayout />}
+					>
+						<Route
+							index
+							element={<AdminDashboard />}
 						/>
 					</Route>
 					<Route

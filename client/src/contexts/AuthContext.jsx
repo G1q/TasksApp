@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
 		}
 
 		const decodedToken = jwtDecode(authToken)
-		return decodedToken.userRole
+		return decodedToken.role
 	}
 
 	const getUserId = () => {

@@ -5,8 +5,8 @@ import styles from './styles/Header.module.css'
 import { useAuth } from '../../contexts/AuthContext'
 import LogoutButton from '../LogoutButton'
 
-const Header = ({ type }) => {
-	const { isLoggedIn, getUsername } = useAuth()
+const Header = ({ type, role }) => {
+	const { isLoggedIn, getUsername, getUserRole } = useAuth()
 
 	return (
 		<header className={styles.header}>
@@ -19,7 +19,7 @@ const Header = ({ type }) => {
 							<>
 								<li className={styles.navigationListItem}>
 									<Link
-										to="projects"
+										to="/projects"
 										className={styles.navigationLink}
 									>
 										Projects
@@ -27,15 +27,26 @@ const Header = ({ type }) => {
 								</li>
 								<li className={styles.navigationListItem}>
 									<Link
-										to="tasks"
+										to="/tasks"
 										className={styles.navigationLink}
 									>
 										Tasks
 									</Link>
 								</li>
+								{/* TODO: change to admin */}
+								{getUserRole() === 'user' && (
+									<li className={styles.navigationListItem}>
+										<Link
+											to="/admin"
+											className={styles.navigationLink}
+										>
+											Admin dashboard
+										</Link>
+									</li>
+								)}
 								<div className="primary__navigation-group">
 									<p>
-										Hello, <Link to="/user/">{getUsername()}</Link>
+										Hello, <Link to="/user">{getUsername()}</Link>
 									</p>
 								</div>
 								<LogoutButton />
@@ -46,7 +57,7 @@ const Header = ({ type }) => {
 							<>
 								<li className={styles.navigationListItem}>
 									<Link
-										to="register"
+										to="/register"
 										className={styles.navigationLink}
 									>
 										Register
@@ -54,7 +65,7 @@ const Header = ({ type }) => {
 								</li>
 								<li className={styles.navigationListItem}>
 									<Link
-										to="login"
+										to="/login"
 										className={styles.navigationLink}
 									>
 										Login
@@ -65,6 +76,48 @@ const Header = ({ type }) => {
 					</ul>
 				)}
 			</nav>
+
+			{isLoggedIn() && getUserRole() === 'user' && role === 'admin' && (
+				<>
+					<hr className={styles.separator} />
+					<nav className={styles.adminNavigation}>
+						<ul className={styles.navigationList}>
+							<li className={styles.navigationListItem}>
+								<Link
+									to="projects"
+									className={styles.navigationLink}
+								>
+									Projects
+								</Link>
+								<Link
+									to="/admin/tasks"
+									className={styles.navigationLink}
+								>
+									Tasks
+								</Link>
+								<Link
+									to="/admin/users"
+									className={styles.navigationLink}
+								>
+									Users
+								</Link>
+								<Link
+									to="/admin/categories"
+									className={styles.navigationLink}
+								>
+									Categories
+								</Link>
+								<Link
+									to="/admin/logs"
+									className={styles.navigationLink}
+								>
+									Logs
+								</Link>
+							</li>
+						</ul>
+					</nav>
+				</>
+			)}
 		</header>
 	)
 }
