@@ -33,8 +33,7 @@ const Header = ({ type, role }) => {
 										Tasks
 									</Link>
 								</li>
-								{/* TODO: change to admin */}
-								{getUserRole() === 'user' && (
+								{getUserRole() === 'admin' && (
 									<li className={styles.navigationListItem}>
 										<Link
 											to="/admin"
@@ -77,7 +76,7 @@ const Header = ({ type, role }) => {
 				)}
 			</nav>
 
-			{isLoggedIn() && getUserRole() === 'user' && role === 'admin' && (
+			{isLoggedIn() && getUserRole() === 'admin' && role === 'admin' && (
 				<>
 					<hr className={styles.separator} />
 					<nav className={styles.adminNavigation}>

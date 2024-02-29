@@ -1,5 +1,7 @@
+import { Navigate } from 'react-router-dom'
+
 const NoPermissions = () => {
-	return <p>You do not have permission to see this page</p>
+	return <Navigate to="/" />
 }
 
 export default NoPermissions

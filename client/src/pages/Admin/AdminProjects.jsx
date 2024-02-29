@@ -38,8 +38,7 @@ const AdminProjects = () => {
 	return (
 		<>
 			<h1>Projects</h1>
-			{/* TODO: change to admin */}
-			{isLoggedIn() && getUserRole() === 'user' ? (
+			{isLoggedIn() && getUserRole() === 'admin' ? (
 				<section>
 					{error && <ErrorMessage message={error} />}
 					<table className={styles.dataTable}>
