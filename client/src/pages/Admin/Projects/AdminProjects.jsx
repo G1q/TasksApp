@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react'
-import styles from '../styles/Projects.module.css'
+import styles from '../../styles/Projects.module.css'
 import { Link } from 'react-router-dom'
-import axiosInstance from '../../config/axios.config'
-import ErrorMessage from '../../components/ErrorMessage'
-import { useAuth } from '../../contexts/AuthContext'
-import NoPermissions from '../../components/NoPermissions'
+import axiosInstance from '../../../config/axios.config'
+import ErrorMessage from '../../../components/ErrorMessage'
+import { useAuth } from '../../../contexts/AuthContext'
+import NoPermissions from '../../../components/NoPermissions'
 
 const AdminProjects = () => {
 	const { isLoggedIn, getUserRole } = useAuth()

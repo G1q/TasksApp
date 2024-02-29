@@ -14,7 +14,9 @@ import ViewTask from './pages/Tasks/ViewTask'
 import EditTask from './pages/Tasks/EditTask'
 import AdminLayout from './layouts/AdminLayout'
 import AdminDashboard from './pages/Admin/AdminDashboard'
-import AdminProjects from './pages/Admin/AdminProjects'
+import AdminProjects from './pages/Admin/Projects/AdminProjects'
+import AdminViewProject from './pages/Admin/Projects/AdminViewProject'
+import AdminEditProject from './pages/Admin/Projects/AdminEditProject'
 
 function App() {
 	return (
@@ -73,6 +75,14 @@ function App() {
 						<Route
 							path="/admin/projects"
 							element={<AdminProjects />}
+						/>
+						<Route
+							path="/admin/projects/view/:id"
+							element={<AdminViewProject />}
+						/>
+						<Route
+							path="/admin/projects/edit"
+							element={<AdminEditProject />}
 						/>
 					</Route>
 					<Route
