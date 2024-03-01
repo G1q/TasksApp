@@ -106,12 +106,6 @@ const Header = ({ type, role }) => {
 								>
 									Categories
 								</Link>
-								<Link
-									to="/admin/logs"
-									className={styles.navigationLink}
-								>
-									Logs
-								</Link>
 							</li>
 						</ul>
 					</nav>
