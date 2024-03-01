@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react'
 import axiosInstance from '../../../config/axios.config'
 import ErrorMessage from '../../../components/ErrorMessage'
 import { useAuth } from '../../../contexts/AuthContext'
-import { formatFullDate } from '../../../utilities/formatDate'
 
 const AdminEditCategory = () => {
 	let { state } = useLocation()
@@ -52,8 +51,6 @@ const AdminEditCategory = () => {
 			{error && <ErrorMessage message={error} />}
 			<section>
 				<div className={styles.projectDetails}>
-					<p>Created on: {formatFullDate(category.createdAt)}</p>
-					<p>Last update on: {formatFullDate(category.updatedAt)}</p>
 					<label htmlFor="title">Title</label>
 					<input
 						type="text"

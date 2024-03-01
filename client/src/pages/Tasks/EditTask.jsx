@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react'
 import axiosInstance from '../../config/axios.config'
 import ErrorMessage from '../../components/ErrorMessage'
 import { useAuth } from '../../contexts/AuthContext'
-import { formatFullDate } from '../../utilities/formatDate'
 import { TASK_PRIORITIES, TASK_STATUS } from '../../data/status'
 
 const EditTask = () => {
@@ -79,8 +78,6 @@ const EditTask = () => {
 			{error && <ErrorMessage message={error} />}
 			<section>
 				<div className={styles.projectDetails}>
-					<p>Created on: {formatFullDate(task.createdAt)}</p>
-					<p>Last update on: {formatFullDate(task.updatedAt)}</p>
 					<label htmlFor="title">Title</label>
 					<input
 						type="text"
