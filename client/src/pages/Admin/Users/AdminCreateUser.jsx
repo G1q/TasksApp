@@ -32,7 +32,7 @@ const AdminCreateUser = () => {
 
 	return (
 		<>
-			<h1>Create new category</h1>
+			<h1>Create new user</h1>
 			{error && <ErrorMessage message={error} />}
 			<section>
 				<form className={styles.createForm}>
@@ -63,7 +63,7 @@ const AdminCreateUser = () => {
 						type="button"
 						onClick={createUser}
 					>
-						Create category
+						Create user
 					</button>
 				</form>
 			</section>
