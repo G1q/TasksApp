@@ -25,11 +25,15 @@ const Tasks = () => {
 	}
 
 	const deleteTask = async (id) => {
-		try {
-			await axiosInstance.delete(`/tasks/${id}`)
-			getTasks()
-		} catch (error) {
-			setError(error.message) || setError(error.response.data.message)
+		const confirm = window.confirm('Are you sure you want to delete this task?')
+
+		if (confirm) {
+			try {
+				await axiosInstance.delete(`/tasks/${id}`)
+				getTasks()
+			} catch (error) {
+				setError(error.message) || setError(error.response.data.message)
+			}
 		}
 	}
 
@@ -56,7 +60,10 @@ const Tasks = () => {
 					</thead>
 					<tbody>
 						{tasks.map((task) => (
-							<tr key={task._id}>
+							<tr
+								key={task._id}
+								data-status={task.status.toLowerCase().replaceAll(' ', '-')}
+							>
 								<td>{task.title}</td>
 								<td>{task.project.title}</td>
 								<td>{task.status}</td>
@@ -74,7 +81,12 @@ const Tasks = () => {
 									</Link>
 								</td>
 								<td>
-									<button onClick={() => deleteTask(task._id)}>&times;</button>
+									<button
+										className={styles.deleteButton}
+										onClick={() => deleteTask(task._id)}
+									>
+										&times;
+									</button>
 								</td>
 							</tr>
 						))}

@@ -8,6 +8,37 @@
 	border: 1px solid;
 }
 
+.deleteButton {
+	border: none;
+	background: none;
+	cursor: pointer;
+	padding: 0;
+	line-height: 1;
+	font-weight: 700;
+	font-size: 1.25rem;
+	color: firebrick;
+}
+
+.dataTable tr[data-status='new'] {
+	background-color: rgba(50, 78, 205, 0.25);
+}
+
+.dataTable tr[data-status='done'] {
+	background-color: rgba(50, 205, 50, 0.5);
+}
+
+.dataTable tr[data-status='cancelled'] {
+	background-color: rgba(173, 173, 173, 0.25);
+}
+
+.dataTable tr[data-status='in-progress'] {
+	background-color: rgba(204, 17, 221, 0.25);
+}
+
+.dataTable tr[data-status='pending'] {
+	background-color: rgba(168, 90, 21, 0.25);
+}
+
 .createForm {
 	display: grid;
 	gap: 1rem;
